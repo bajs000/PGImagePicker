@@ -274,49 +274,61 @@
             {
                 NSInteger startI = 0;
                 NSInteger endI = 0;
-                NSInteger tempI = 0;
-                
-                startI = _nStartIndexPath.row;
-                endI = _lastAccessed.row;
-                if (startI > endI) {
-                    tempI = startI;
-                    startI = endI;
-                    endI = tempI;
-                }
-//                NSLog(@"clean: start: %ld end: %ld",startI,endI);
-                for (NSInteger i = startI; i <= endI; i++) {
-                    [self setIndexPath:[NSIndexPath indexPathForRow:i inSection:0] SelectStatus:false];
-                }
-                
-                startI = _nStartIndexPath.row;
-                endI = indexPath.row;
-                if (startI > endI) {
-                    tempI = startI;
-                    startI = endI;
-                    endI = tempI;
-                    if (endI - startI > _nMaxCount) {
-                        startI = endI - _nMaxCount + 1;
-                    }
-                }else{
-                    if (endI - startI > _nMaxCount) {
-                        endI = startI + _nMaxCount - 1;
-                    }
-                }
-//                NSLog(@"fill: start: %ld end: %ld",startI,endI);
-                for (NSInteger i = startI; i <= endI; i++) {
-                    [self setIndexPath:[NSIndexPath indexPathForRow:i inSection:0] SelectStatus:true];
-                }
-                [_delegate imagePicker:self numberOfAssetsDidSelected:_dSelected.count];
-//                if (_lastAccessed.row < indexPath.row) {
-//                    startI = _lastAccessed.row;
-//                    endI = indexPath.row;
+//                NSInteger tempI = 0;
+//                
+//                startI = _nStartIndexPath.row;
+//                endI = _lastAccessed.row;
+//                if (startI > endI) {
+//                    tempI = startI;
+//                    startI = endI;
+//                    endI = tempI;
+//                }
+////                NSLog(@"clean: start: %ld end: %ld",startI,endI);
+//                for (NSInteger i = startI; i <= endI; i++) {
+//                    [self setIndexPath:[NSIndexPath indexPathForRow:i inSection:0] SelectStatus:false];
+//                }
+//                
+//                startI = _nStartIndexPath.row;
+//                endI = indexPath.row;
+//                if (startI > endI) {
+//                    tempI = startI;
+//                    startI = endI;
+//                    endI = tempI;
+//                    if (endI - startI > _nMaxCount) {
+//                        startI = endI - _nMaxCount + 1;
+//                    }
 //                }else{
-//                    endI = _lastAccessed.row;
-//                    startI = indexPath.row;
+//                    if (endI - startI > _nMaxCount) {
+//                        endI = startI + _nMaxCount - 1;
+//                    }
 //                }
-//                for (NSInteger i = startI + 1; i < endI + 1; i++) {
-//                    [self collectionView:_collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+////                NSLog(@"fill: start: %ld end: %ld",startI,endI);
+//                for (NSInteger i = startI; i <= endI; i++) {
+//                    [self setIndexPath:[NSIndexPath indexPathForRow:i inSection:0] SelectStatus:true];
 //                }
+                [_delegate imagePicker:self numberOfAssetsDidSelected:_dSelected.count];
+                if (_lastAccessed.row < indexPath.row) {
+                    startI = _lastAccessed.row + 1;
+                    endI = indexPath.row;
+                }else{
+                    startI = indexPath.row;
+                    endI = _lastAccessed.row - 1;
+                }
+                if (indexPath.row - _nStartIndexPath.row < _lastAccessed.row - _nStartIndexPath.row) {
+                    if (indexPath.row < _nStartIndexPath.row && _lastAccessed.row >= _nStartIndexPath.row){
+                        
+                    }else if (indexPath.row < _nStartIndexPath.row && _lastAccessed.row < _nStartIndexPath.row){
+                        endI--;
+                    }else{
+                        startI++;
+                    }
+                    endI++;
+                }else{
+                    
+                }
+                for (NSInteger i = startI; i <= endI; i++) {
+                    [self collectionView:_collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                }
             }
             
             _lastAccessed = indexPath;

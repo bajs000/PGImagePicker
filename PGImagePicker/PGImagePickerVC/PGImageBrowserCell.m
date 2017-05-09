@@ -36,7 +36,20 @@
     // 同步获得图片, 只会返回1张图片
     options.synchronous = YES;
     WS(ws)
-    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeDefault options:options resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
+    CGFloat width = asset.pixelWidth;
+    CGFloat height = asset.pixelHeight;
+    if (width >= height) {
+        if (asset.pixelWidth > SCREENWIDTH) {
+            width = SCREENWIDTH * [UIScreen mainScreen].scale;
+            height = SCREENWIDTH * asset.pixelHeight / asset.pixelWidth;
+        }
+    }else{
+        if (asset.pixelHeight > SCREENHEIGHT) {
+            height = SCREENHEIGHT * [UIScreen mainScreen].scale;
+            width = SCREENWIDTH * asset.pixelWidth / asset.pixelHeight;
+        }
+    }
+    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(width,height) contentMode:PHImageContentModeDefault options:options resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
         UIImageView *textimage = [[UIImageView alloc] initWithImage:image];
         
         //移除上一个artimage
