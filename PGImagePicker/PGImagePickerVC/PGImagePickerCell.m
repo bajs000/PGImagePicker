@@ -23,7 +23,7 @@
         if (!bSelect) {
             _animatiomView.alpha = 0.5;
         }
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.5 animations:^{
             if (bSelect) {
                 _animatiomView.alpha = 0.5;
             }else {

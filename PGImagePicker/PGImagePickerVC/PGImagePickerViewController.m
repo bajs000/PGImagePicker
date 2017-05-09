@@ -274,6 +274,7 @@
             {
                 NSInteger startI = 0;
                 NSInteger endI = 0;
+                /*FIXME: 该注释是模仿iOS自带相册手势选择，即pan经过的都选，不会出现反选 */
 //                NSInteger tempI = 0;
 //                
 //                startI = _nStartIndexPath.row;
@@ -306,32 +307,65 @@
 //                for (NSInteger i = startI; i <= endI; i++) {
 //                    [self setIndexPath:[NSIndexPath indexPathForRow:i inSection:0] SelectStatus:true];
 //                }
+                /*FIXME: 以下是在手势选择时，如遇到被选的相片，会被反选 */
                 [_delegate imagePicker:self numberOfAssetsDidSelected:_dSelected.count];
-                if (_lastAccessed.row < indexPath.row) {
-                    startI = _lastAccessed.row + 1;
-                    endI = indexPath.row;
-                }else{
-                    startI = indexPath.row;
-                    endI = _lastAccessed.row - 1;
-                }
-                if (indexPath.row - _nStartIndexPath.row < _lastAccessed.row - _nStartIndexPath.row) {
-                    if (indexPath.row < _nStartIndexPath.row && _lastAccessed.row >= _nStartIndexPath.row){
-                        
-                    }else if (indexPath.row < _nStartIndexPath.row && _lastAccessed.row < _nStartIndexPath.row){
-                        endI--;
+                if (indexPath.row >= _nStartIndexPath.row) {
+                    if (_lastAccessed.row < indexPath.row) {
+                        startI = _lastAccessed.row + 1;
+                        endI = indexPath.row;
                     }else{
-                        startI++;
+                        startI = indexPath.row;
+                        endI = _lastAccessed.row - 1;
                     }
-                    endI++;
+                    if (indexPath.row - _nStartIndexPath.row < _lastAccessed.row - _nStartIndexPath.row) {
+                        startI++;
+                        endI++;
+                    }
+                    if (_lastAccessed.row < _nStartIndexPath.row) {
+                        startI--;
+                    }
                 }else{
-                    
+                    if (_lastAccessed.row < indexPath.row) {
+                        startI = _lastAccessed.row;
+                        endI = indexPath.row;
+                    }else{
+                        startI = indexPath.row;
+                        endI = _lastAccessed.row;
+                    }
+                    if (_lastAccessed.row >= _nStartIndexPath.row) {
+                        
+                    }else{
+                        endI--;
+                    }
                 }
                 for (NSInteger i = startI; i <= endI; i++) {
                     [self collectionView:_collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
                 }
             }
             
-            _lastAccessed = indexPath;
+            if (!_dSelected[@(_nStartIndexPath.row)]) {
+                [_dSelected setObject:@(_dSelected.count) forKey:@(_nStartIndexPath.row)];
+                PGImagePickerCell *cell = (PGImagePickerCell *)[_collectionView cellForItemAtIndexPath:_nStartIndexPath];
+                [cell setSelectMode:true];
+                if (_nMaxCount == -1)
+                    self.title = [NSString stringWithFormat:@"(%d)", (int)_dSelected.count];
+                else
+                    self.title = [NSString stringWithFormat:@"(%d/%d)", (int)_dSelected.count, (int)_nMaxCount];
+            }
+            
+            if (_dSelected.count == 30) {
+                NSArray *key =  _dSelected.allKeys;
+                NSNumber *num;
+                if (indexPath.row > _nStartIndexPath.row) {
+                    num = [key sortedArrayUsingSelector:@selector(compare:)].lastObject;
+                }else{
+                    num = [key sortedArrayUsingSelector:@selector(compare:)].firstObject;
+                }
+                _lastAccessed = [NSIndexPath indexPathForRow:num.integerValue inSection:0];
+            }else{
+                _lastAccessed = indexPath;
+            }
+            
         }
     }
     
