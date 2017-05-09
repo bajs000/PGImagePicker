@@ -14,82 +14,6 @@
 #define SCREENWIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREENHEIGHT [UIScreen mainScreen].bounds.size.height
 
-@interface PGLineLayout : UICollectionViewFlowLayout
-
-@end
-
-@implementation PGLineLayout
-
-- (void)prepareLayout
-{
-    [super prepareLayout];
-    
-}
-
-// 当布局改变时重新加载layout
-- (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
-{
-    return YES;
-}
-
-
-// 对layoutAttrute根据需要做调整，也许是frame,alpha,transform等
-- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
-{
-    // 获取父类原先的(未放大形变的)attrsArray,我们要对其attr的frame属性做下调整
-    NSArray *attrsArray = [super layoutAttributesForElementsInRect:rect];
-    CGFloat centerX = self.collectionView.frame.size.width*0.5 + self.collectionView.contentOffset.x;
-    
-    for(UICollectionViewLayoutAttributes *attr in attrsArray)
-    {
-        CGFloat length = 0.f;
-        if(attr.center.x > centerX)
-        {
-            length = attr.center.x - centerX;
-        }
-        else
-        {
-            length = centerX - attr.center.x;
-        }
-        
-        CGFloat scale = 1 - length / self.collectionView.frame.size.width;
-        
-        attr.transform = CGAffineTransformMakeScale(scale, scale);
-    }
-    
-    return attrsArray;
-}
-
-
-//- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity
-//{
-//    // 某cell滑动停止时的最终rect
-//    CGRect rect;
-//    rect.origin.x = proposedContentOffset.x;
-//    rect.origin.y = 0.f;
-//    rect.size = self.collectionView.frame.size;
-//    
-//    // 计算collectionView最中心点的x值
-//    CGFloat centerX = proposedContentOffset.x + self.collectionView.frame.size.width * 0.5;
-//    
-//    // 获得super已经计算好的布局属性
-//    CGFloat offset = 0.0f;
-//    NSArray *attrsArray = [super layoutAttributesForElementsInRect:rect];
-//    for(UICollectionViewLayoutAttributes *attr in attrsArray)
-//    {
-//        if(attr.center.x - centerX > 100 || centerX - attr.center.x > 100)
-//        {
-//            offset = attr.center.x - centerX; // 此刻，cell的center的x和此刻CollectionView的中心点的距离
-//        }
-//    }
-//    
-//    proposedContentOffset.x += offset;
-//    
-//    return proposedContentOffset;
-//}
-
-@end
-
 @interface PGImageBrowserViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CAAnimationDelegate>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -144,13 +68,10 @@
     return cell;
 }
 
-- (CGPoint)collectionView:(UICollectionView *)collectionView targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset{
-    return CGPointMake(_currentCount * [UIScreen mainScreen].bounds.size.width, 0);
-}
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     int row = scrollView.contentOffset.x / [UIScreen mainScreen].bounds.size.width;
     _selectBtn.selected = (_dSelected[@(row)] != nil);
+    
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
