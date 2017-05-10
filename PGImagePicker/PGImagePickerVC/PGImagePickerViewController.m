@@ -209,7 +209,7 @@
     // 同步获得图片, 只会返回1张图片
     options.synchronous = YES;
     __weak PGImagePickerCell *tempCell = cell;
-    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeZero contentMode:PHImageContentModeDefault options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(_flowLayout.itemSize.width * 3, _flowLayout.itemSize.height * 3) contentMode:PHImageContentModeDefault options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         tempCell.imageView.image = result;
     }];
     if (_dSelected[@(indexPath.row)] == nil){

@@ -68,10 +68,12 @@
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     int row = scrollView.contentOffset.x / [UIScreen mainScreen].bounds.size.width;
     _selectBtn.selected = (_dSelected[@(row)] != nil);
-    
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
