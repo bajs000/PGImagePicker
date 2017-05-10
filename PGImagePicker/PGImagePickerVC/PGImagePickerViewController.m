@@ -15,7 +15,9 @@
 #define EDGEOFFSET 20
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 
-@interface PGImagePickerViewController ()<UICollectionViewDelegate, UICollectionViewDataSource>
+@interface PGImagePickerViewController ()<UICollectionViewDelegate, UICollectionViewDataSource>{
+    BOOL nStartSelected;
+}
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
@@ -77,7 +79,7 @@
     _dSelected = [[NSMutableDictionary alloc] init];
     _nMaxCount = -1;
     CGRect screenBounds = [UIScreen mainScreen].bounds;
-    int width = ((int)screenBounds.size.width - 30) / ITEM_COLUMN_COUNT;
+    int width = ((int)screenBounds.size.width - 3 * _flowLayout.minimumLineSpacing) / ITEM_COLUMN_COUNT;
     _flowLayout.itemSize = CGSizeMake(width, width);
     if ([_delegate respondsToSelector:@selector(numberOfItemCanSelected)]) {
         _nMaxCount = [_delegate numberOfItemCanSelected];
@@ -267,6 +269,9 @@
             
             if (_nStartIndexPath == nil) {
                 _nStartIndexPath = indexPath;
+                if (_dSelected[@(_nStartIndexPath.row)]) {
+                    nStartSelected = true;
+                }
             }
             if (_lastAccessed == nil) {
                 [self collectionView:_collectionView didSelectItemAtIndexPath:indexPath];
@@ -353,6 +358,16 @@
                     self.title = [NSString stringWithFormat:@"(%d/%d)", (int)_dSelected.count, (int)_nMaxCount];
             }
             
+            if (nStartSelected && _dSelected[@(_nStartIndexPath.row)]) {
+                [_dSelected setObject:@(_dSelected.count) forKey:@(_nStartIndexPath.row)];
+                PGImagePickerCell *cell = (PGImagePickerCell *)[_collectionView cellForItemAtIndexPath:_nStartIndexPath];
+                [cell setSelectMode:false];
+                if (_nMaxCount == -1)
+                    self.title = [NSString stringWithFormat:@"(%d)", (int)_dSelected.count];
+                else
+                    self.title = [NSString stringWithFormat:@"(%d/%d)", (int)_dSelected.count, (int)_nMaxCount];
+            }
+            
             if (_dSelected.count == 30) {
                 NSArray *key =  _dSelected.allKeys;
                 NSNumber *num;
@@ -373,6 +388,7 @@
     {
         _lastAccessed = nil;
         _nStartIndexPath = nil;
+        nStartSelected = false;
         _collectionView.scrollEnabled = YES;
         [_timer invalidate];
         _timer = nil;

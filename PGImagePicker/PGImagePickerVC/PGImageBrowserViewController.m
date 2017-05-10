@@ -14,7 +14,9 @@
 #define SCREENWIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREENHEIGHT [UIScreen mainScreen].bounds.size.height
 
-@interface PGImageBrowserViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CAAnimationDelegate>
+@interface PGImageBrowserViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CAAnimationDelegate>{
+    BOOL isOritenting;
+}
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIButton *selectBtn;
@@ -29,24 +31,34 @@
     [AppDelegate updateRotationStatus:true];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         self.collectionView.hidden = false;
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentCount inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:false];
+        [self.collectionView setContentOffset:CGPointMake(_currentCount * (SCREENWIDTH + 10), 0) animated:false];
     });
     _selectBtn.selected = (_dSelected[@(_currentCount)] != nil);
 }
 
+- (void)viewDidLayoutSubviews{
+    if (isOritenting) {
+        [self.collectionView setContentOffset:CGPointMake(_currentCount * (SCREENWIDTH + 10), 0) animated:false];
+        isOritenting = false;
+    }
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator{
+    isOritenting = true;
+//    [self.collectionView.collectionViewLayout invalidateLayout];
     [self.collectionView reloadData];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return YES;
+//}
 
 - (void)dealloc{
     NSLog(@"dealloc");

@@ -24,15 +24,15 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="vnP-np-CCS">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HBK-UK-Oen">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="HBK-UK-Oen">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="xc2-5c-mDT" customClass="PGImagePickerCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <rect key="frame" x="0.0" y="1" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -46,14 +46,18 @@
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
                                                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="redefined.png" translatesAutoresizingMaskIntoConstraints="NO" id="Q6O-Dc-DUy">
-                                                    <rect key="frame" x="14" y="14" width="36" height="36"/>
+                                                    <rect key="frame" x="30" y="30" width="18" height="18"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="18" id="48L-r7-Mkj"/>
+                                                        <constraint firstAttribute="width" constant="18" id="ozY-k1-gks"/>
+                                                    </constraints>
                                                 </imageView>
                                             </subviews>
                                         </view>
                                         <constraints>
                                             <constraint firstItem="ZWc-YC-zmI" firstAttribute="leading" secondItem="xc2-5c-mDT" secondAttribute="leading" id="3Km-19-mbb"/>
-                                            <constraint firstAttribute="bottom" secondItem="Q6O-Dc-DUy" secondAttribute="bottom" id="EN3-gl-9Ky"/>
-                                            <constraint firstAttribute="trailing" secondItem="Q6O-Dc-DUy" secondAttribute="trailing" id="Fhn-Yc-4t4"/>
+                                            <constraint firstAttribute="bottom" secondItem="Q6O-Dc-DUy" secondAttribute="bottom" constant="2" id="EN3-gl-9Ky"/>
+                                            <constraint firstAttribute="trailing" secondItem="Q6O-Dc-DUy" secondAttribute="trailing" constant="2" id="Fhn-Yc-4t4"/>
                                             <constraint firstAttribute="trailing" secondItem="ZWc-YC-zmI" secondAttribute="trailing" id="Naa-y7-1nK"/>
                                             <constraint firstAttribute="bottom" secondItem="ZWc-YC-zmI" secondAttribute="bottom" id="Qd3-an-4qK"/>
                                             <constraint firstAttribute="trailing" secondItem="zwZ-q6-VSW" secondAttribute="trailing" id="bpc-0S-PpZ"/>

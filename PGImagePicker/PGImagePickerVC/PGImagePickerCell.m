@@ -20,19 +20,11 @@
 {
     if (bSelect != _beSelect) {
         _beSelect = bSelect;
-        if (!bSelect) {
-            _animatiomView.alpha = 0.5;
-        }
-        [UIView animateWithDuration:0.5 animations:^{
-            if (bSelect) {
-                _animatiomView.alpha = 0.5;
-            }else {
-                _animatiomView.alpha = 0;
-            }
+        _animatiomView.alpha = 0.8;
+        [UIView animateWithDuration:0.8 animations:^{
+            _animatiomView.alpha = 0;
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.3 animations:^{
-                _animatiomView.alpha = 0;
-            }];
+            
         }];
     }
     if (bSelect)
