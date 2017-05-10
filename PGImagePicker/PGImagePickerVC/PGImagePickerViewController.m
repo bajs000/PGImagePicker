@@ -344,11 +344,13 @@
                     }
                 }
                 for (NSInteger i = startI; i <= endI; i++) {
+                    if (nStartSelected && i == _nStartIndexPath.row) {
+                        continue;
+                    }
                     [self collectionView:_collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
                 }
             }
-            
-            if (!_dSelected[@(_nStartIndexPath.row)]) {
+            if (!_dSelected[@(_nStartIndexPath.row)] && !nStartSelected) {
                 [_dSelected setObject:@(_dSelected.count) forKey:@(_nStartIndexPath.row)];
                 PGImagePickerCell *cell = (PGImagePickerCell *)[_collectionView cellForItemAtIndexPath:_nStartIndexPath];
                 [cell setSelectMode:true];
@@ -358,15 +360,15 @@
                     self.title = [NSString stringWithFormat:@"(%d/%d)", (int)_dSelected.count, (int)_nMaxCount];
             }
             
-            if (nStartSelected && _dSelected[@(_nStartIndexPath.row)]) {
-                [_dSelected setObject:@(_dSelected.count) forKey:@(_nStartIndexPath.row)];
-                PGImagePickerCell *cell = (PGImagePickerCell *)[_collectionView cellForItemAtIndexPath:_nStartIndexPath];
-                [cell setSelectMode:false];
-                if (_nMaxCount == -1)
-                    self.title = [NSString stringWithFormat:@"(%d)", (int)_dSelected.count];
-                else
-                    self.title = [NSString stringWithFormat:@"(%d/%d)", (int)_dSelected.count, (int)_nMaxCount];
-            }
+//            if (nStartSelected && _dSelected[@(_nStartIndexPath.row)]) {
+//                [_dSelected setObject:@(_dSelected.count) forKey:@(_nStartIndexPath.row)];
+//                PGImagePickerCell *cell = (PGImagePickerCell *)[_collectionView cellForItemAtIndexPath:_nStartIndexPath];
+//                [cell setSelectMode:false];
+//                if (_nMaxCount == -1)
+//                    self.title = [NSString stringWithFormat:@"(%d)", (int)_dSelected.count];
+//                else
+//                    self.title = [NSString stringWithFormat:@"(%d/%d)", (int)_dSelected.count, (int)_nMaxCount];
+//            }
             
             if (_dSelected.count == 30) {
                 NSArray *key =  _dSelected.allKeys;
